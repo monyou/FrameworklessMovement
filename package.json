@@ -1,0 +1,23 @@
+{
+    "name": "frameworkless_movement",
+    "type": "module",
+    "version": "1.0",
+    "description": "This is a project of pure JS skills and maybe a little external package helpers. Main goal is to create an fully functional app without the need of modern frameworks.",
+    "main": "src/script.ts",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "SMechkov",
+    "license": "MIT",
+    "devDependencies": {
+        "typescript": "^5.8.3",
+        "vite": "^7.0.2"
+    },
+    "dependencies": {
+        "@tailwindcss/vite": "^4.1.11",
+        "tailwindcss": "^4.1.11"
+    }
+}
