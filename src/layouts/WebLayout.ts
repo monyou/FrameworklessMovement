@@ -19,6 +19,8 @@ class WebLayout extends HTMLElement {
                     <p>&copy; ${new Date().getFullYear()} Frameworkless Movement</p>
                 </footer>
             </div>
+            <toast-component></toast-component>
+            <loader-component></loader-component>
         `;
     }
 }

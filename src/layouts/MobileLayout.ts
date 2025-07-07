@@ -18,7 +18,9 @@ class MobileLayout extends HTMLElement {
                 <footer class="bg-gray-800 text-white p-4 text-center">
                     <p>&copy; ${new Date().getFullYear()} Frameworkless Movement</p>
                 </footer>
-            </div> 
+            </div>
+            <toast-component></toast-component>
+            <loader-component></loader-component>
         `;
     }
 }

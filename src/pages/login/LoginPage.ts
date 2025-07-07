@@ -33,6 +33,8 @@ class LoginPage extends HTMLElement {
                     <button id="login-btn" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200 cursor-pointer">Login</button>
                 </form>
             </div>
+            <toast-component></toast-component>
+            <loader-component></loader-component>
         `;
     }
 }
