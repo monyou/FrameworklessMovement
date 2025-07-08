@@ -1,11 +1,5 @@
-declare class URLPattern {
-    constructor(input: { pathname: string });
-    test(input: { pathname: string }): boolean;
-    exec(input: { pathname: string }): { pathname: { groups: Record<string, string> } } | null;
-}
-
 type Route = {
-    pattern: URLPattern;
+    pattern: string;
     load: () => Promise<any>;
     tag: string;
 };
@@ -19,40 +13,65 @@ const noLayoutRoutePaths: string[] = [
 
 const routes: Route[] = [
     {
-        pattern: new URLPattern({ pathname: '/' }),
+        pattern: '/',
         load: () => import('../pages/home/HomePage'),
         tag: 'home-page'
     },
     {
-        pattern: new URLPattern({ pathname: '/login' }),
+        pattern: '/login',
         load: () => import('../pages/login/LoginPage'),
         tag: 'login-page'
     },
     {
-        pattern: new URLPattern({ pathname: '/register' }),
+        pattern: '/register',
         load: () => import('../pages/register/RegisterPage'),
         tag: 'register-page'
     },
     {
-        pattern: new URLPattern({ pathname: '/app' }),
+        pattern: '/app',
         load: () => import('../pages/dashboard/DashboardPage'),
         tag: 'dashboard-page'
     },
     {
-        pattern: new URLPattern({ pathname: '/404' }),
+        pattern: '/404',
         load: () => import('../pages/errors/404'),
         tag: 'not-found-page'
     }
 ];
 
-export const navigate = (path: string) => {
+const extractParams = (pattern: string, path: string): Record<string, string> | null => {
+    const paramNames: string[] = [];
+
+    const regex = new RegExp(
+        '^' +
+        pattern.replace(/\/:([^/]+)/g, (_, name) => {
+            paramNames.push(name);
+            return '/([^/]+)';
+        }) +
+        '$'
+    );
+
+    const match = path.match(regex);
+    if (!match) return null;
+
+    const params: Record<string, string> = {};
+    paramNames.forEach((name, i) => {
+        params[name] = decodeURIComponent(match[i + 1]);
+    });
+
+    return params;
+}
+
+
+export const navigate = async (path: string) => {
     history.pushState({}, '', path);
-    renderRoute();
+    await renderRoute();
 }
 
 export const renderRoute = async () => {
+    let params = null;
     const path = window.location.pathname;
-    const match = routes.find(route => route.pattern.test({ pathname: path }));
+    const match = routes.find(route => { params = extractParams(route.pattern, path); return params !== null; });
 
     const app = document.getElementById('app');
     if (!app) return;
@@ -65,10 +84,6 @@ export const renderRoute = async () => {
 
     // Lazy load the page
     await match.load();
-
-    // Extract params
-    const matchResult = match.pattern.exec({ pathname: path });
-    const params = matchResult?.pathname.groups ?? {};
 
     // Clear and render with layout
     let layout;

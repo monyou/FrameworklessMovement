@@ -21,7 +21,7 @@ class LoginPage extends HTMLElement {
         this.innerHTML = `
             <div id="login-page" class="flex flex-col items-center justify-center h-full">
                 <h1 class="text-4xl mb-6">Login</h1>
-                <form id="login-form" class="bg-gray-800 p-8 rounded shadow-md w-96" novalidate>
+                <form id="login-form" class="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-96" novalidate>
                     <div class="mb-4">
                         <label for="email" class="block text-sm font-medium">Email</label>
                         <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
