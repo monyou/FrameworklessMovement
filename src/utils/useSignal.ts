@@ -8,14 +8,14 @@ const useSignal = <T>(initialState: T): Signal<T> => {
     let value = initialState;
     const subscribers = new Set<() => void>();
 
-    const read = () => value;
-    read.subscribe = (fn: () => void) => subscribers.add(fn);
-    read.set = (v: T) => {
+    const signal = () => value;
+    signal.subscribe = (fn: () => void) => subscribers.add(fn);
+    signal.set = (v: T) => {
         value = v;
         subscribers.forEach(fn => fn());
     };
 
-    return read;
+    return signal;
 }
 
 

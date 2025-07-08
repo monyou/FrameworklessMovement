@@ -13,6 +13,7 @@ type Route = {
 const noLayoutRoutePaths: string[] = [
     '/',
     '/login',
+    '/register',
     '/404'
 ];
 
@@ -28,8 +29,13 @@ const routes: Route[] = [
         tag: 'login-page'
     },
     {
+        pattern: new URLPattern({ pathname: '/register' }),
+        load: () => import('../pages/register/RegisterPage'),
+        tag: 'register-page'
+    },
+    {
         pattern: new URLPattern({ pathname: '/app' }),
-        load: () => import('../pages/dashboard/Dashboard'),
+        load: () => import('../pages/dashboard/DashboardPage'),
         tag: 'dashboard-page'
     },
     {
@@ -52,7 +58,8 @@ export const renderRoute = async () => {
     if (!app) return;
 
     if (!match) {
-        navigate('/404');
+        history.replaceState({}, '', '/404');
+        renderRoute();
         return;
     }
 

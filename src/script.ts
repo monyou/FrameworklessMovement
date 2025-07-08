@@ -1,13 +1,17 @@
 import './style.css';
 import Toast from './components/Toast';
 import LoaderComponent from './components/Loader';
+import ThemeSwitcher from './components/ThemeSwitcher';
 import { navigate, renderRoute } from './utils/router';
+import { globalStore } from './utils/store';
 
 // Register global components
 customElements.define('toast-component', Toast);
 customElements.define('loader-component', LoaderComponent);
+customElements.define('theme-switcher', ThemeSwitcher);
 
 window.addEventListener('DOMContentLoaded', () => {
+    document.documentElement.classList.toggle('dark', globalStore().theme === 'dark');
     renderRoute();
 
     document.body.addEventListener('click', (e) => {

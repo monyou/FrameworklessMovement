@@ -30,8 +30,8 @@ class DashboardPage extends HTMLElement {
         this.innerHTML = `
             <div id="dashboard-page" class="p-4">
                 <h1 class="text-4xl text-center mb-6">Dashboard</h1>
-                <p class="text-center text-gray-700">Welcome to your dashboard!</p>
-                <button id="count-btn" class="mt-4 mx-auto block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 cursor-pointer">Count: ${this.count()}</button>
+                <p class="text-center text-gray-500">Welcome to your dashboard!</p>
+                <button id="count-btn" class="mt-4 mx-auto block primary-btn">Count: ${this.count()}</button>
             </div>      
         `;
     }
