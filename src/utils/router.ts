@@ -2,30 +2,35 @@ type Route = {
     pattern: string;
     load: () => Promise<any>;
     tag: string;
+    noAuth?: boolean;
+    noLayout?: boolean;
+    isSystem?: boolean;
 };
-
-const noLayoutRoutePaths: string[] = [
-    '/',
-    '/login',
-    '/register',
-    '/404'
-];
 
 const routes: Route[] = [
     {
         pattern: '/',
         load: () => import('../pages/home/HomePage'),
-        tag: 'home-page'
+        tag: 'home-page',
+        noAuth: true,
+        noLayout: true,
+        isSystem: true
     },
     {
         pattern: '/login',
         load: () => import('../pages/login/LoginPage'),
-        tag: 'login-page'
+        tag: 'login-page',
+        noAuth: true,
+        noLayout: true,
+        isSystem: true
     },
     {
         pattern: '/register',
         load: () => import('../pages/register/RegisterPage'),
-        tag: 'register-page'
+        tag: 'register-page',
+        noAuth: true,
+        noLayout: true,
+        isSystem: true
     },
     {
         pattern: '/app',
@@ -35,7 +40,9 @@ const routes: Route[] = [
     {
         pattern: '/404',
         load: () => import('../pages/errors/404'),
-        tag: 'not-found-page'
+        tag: 'not-found-page',
+        noAuth: true,
+        noLayout: true
     }
 ];
 
@@ -63,33 +70,52 @@ const extractParams = (pattern: string, path: string): Record<string, string> | 
 }
 
 
-export const navigate = async (path: string) => {
-    history.pushState({}, '', path);
+export const navigate = async (path: string, replace?: boolean) => {
+    if (replace) {
+        history.replaceState({}, '', path);
+    } else {
+        history.pushState({}, '', path);
+    }
     await renderRoute();
 }
 
 export const renderRoute = async () => {
     let params = null;
     const path = window.location.pathname;
-    const match = routes.find(route => { params = extractParams(route.pattern, path); return params !== null; });
+
+    // Match the route and extract parameters if any
+    const matchedRoute = routes.find(route => { params = extractParams(route.pattern, path); return params !== null; });
 
     const app = document.getElementById('app');
     if (!app) return;
 
-    if (!match) {
-        history.replaceState({}, '', '/404');
-        renderRoute();
+    // Unknown page handling
+    if (!matchedRoute) {
+        navigate('/404', true);
+        return;
+    }
+
+    // Check for authenticated user
+    const isAuth = document.cookie.includes('sm_movie_match_auth=');
+    if (isAuth && matchedRoute.isSystem) {
+        navigate('/app', true);
+        return;
+    }
+    if (!isAuth && !matchedRoute.noAuth) {
+        navigate('/login', true);
         return;
     }
 
     // Lazy load the page
-    await match.load();
+    await matchedRoute.load();
 
-    // Clear and render with layout
+    // Clear and render logic
     let layout;
-    const el = document.createElement(match.tag);
+    const el = document.createElement(matchedRoute.tag);
     Object.assign(el, params); // Pass params as props
     app.innerHTML = '';
+
+    // Determine layout based on screen width
     if (window.screen.width < 768) {
         await import('../layouts/MobileLayout');
         layout = document.createElement('mobile-layout');
@@ -97,7 +123,9 @@ export const renderRoute = async () => {
         await import('../layouts/WebLayout');
         layout = document.createElement('web-layout');
     }
-    if (noLayoutRoutePaths.includes(path)) {
+
+    // Render content
+    if (matchedRoute.noLayout) {
         app.appendChild(el);
     } else {
         app.appendChild(layout);
