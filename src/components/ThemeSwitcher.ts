@@ -1,16 +1,16 @@
-import { globalStore } from "../utils/store";
+import { themeStore } from "../utils/store";
 
 
 class ThemeSwitcher extends HTMLElement {
     connectedCallback() {
         this.render();
-        globalStore.subscribe(() => {
-            document.documentElement.classList.toggle('dark', globalStore().theme === 'dark');
+        themeStore.subscribe(() => {
+            document.documentElement.classList.toggle('dark', themeStore() === 'dark');
         });
         this.addEventListener('click', (e) => {
             const target = e.target as HTMLElement;
             if (target.matches('#theme-btn, #theme-btn *')) {
-                globalStore.set({ ...globalStore(), theme: globalStore().theme === 'light' ? 'dark' : 'light' });
+                themeStore.set(themeStore() === 'light' ? 'dark' : 'light');
             }
         });
     }

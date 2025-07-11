@@ -1,8 +1,5 @@
+import type { Theme, User } from '../types/storeTypes';
 import useSignal from './useSignal';
-
-type GlobalStore = {
-    theme: 'light' | 'dark';
-}
 
 const createPersistentStore = <T>(key: string, defaultValue: T) => {
     const stored = localStorage.getItem(key);
@@ -16,8 +13,5 @@ const createPersistentStore = <T>(key: string, defaultValue: T) => {
     return signal;
 }
 
-const initialGlobalStore: GlobalStore = {
-    theme: 'light',
-};
-
-export const globalStore = createPersistentStore<GlobalStore>('fm-global-store', initialGlobalStore);
+export const themeStore = createPersistentStore<Theme>('sm-movie-match-theme-store', 'light');
+export const userStore = createPersistentStore<User | null>('sm-movie-match-user-store', null);

@@ -1,3 +1,5 @@
+import { userStore } from './store';
+
 type Route = {
     pattern: string;
     load: () => Promise<any>;
@@ -96,7 +98,7 @@ export const renderRoute = async () => {
     }
 
     // Check for authenticated user
-    const isAuth = document.cookie.includes('sm_movie_match_auth=');
+    const isAuth = !!userStore()
     if (isAuth && matchedRoute.isSystem) {
         navigate('/app', true);
         return;
