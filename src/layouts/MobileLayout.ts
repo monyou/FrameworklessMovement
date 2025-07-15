@@ -16,7 +16,9 @@ class MobileLayout extends HTMLElement {
     }
 
     logout = async () => {
-        const response = await callServer('/auth/logout');
+        const response = await callServer('/auth/logout', {
+            method: 'POST'
+        });
 
         if (!response) return;
 

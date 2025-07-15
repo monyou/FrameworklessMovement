@@ -158,6 +158,7 @@ class LoginPage extends HTMLElement {
                         <span id="password-error" class="${this.loginFormStore().password.error ? '' : 'hidden'} text-red-500 text-sm mt-1 pl-2">${this.loginFormStore().password.error}</span>
                     </div>
                     <button id="login-btn" class="w-full primary-btn">Login</button>
+                    <button id="register-btn" data-link="/register" class="w-full secondary-btn mt-2">Register</button>
                 </form>
             </div>
             <toast-component></toast-component>
