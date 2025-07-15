@@ -3,7 +3,7 @@ import useSignal from "../utils/useSignal";
 type Toast = {
     id: number;
     message: string;
-    type?: 'success' | 'error' | 'info';
+    type?: 'success' | 'error' | 'info' | 'warning';
 };
 
 const toasts = useSignal<Toast[]>([]);
@@ -36,7 +36,7 @@ class ToastComponent extends HTMLElement {
         this.innerHTML = `
             <div class="fixed top-4 right-4 space-y-2 z-50">
                 ${this.toasts().map(toast => `
-                    <div class="p-3 rounded shadow-md max-w-xs text-white ${toast.type === 'success' ? 'bg-green-500' : toast.type === 'error' ? 'bg-red-500' : 'bg-secondary'}">
+                    <div class="p-3 rounded shadow-md max-w-xs text-white ${toast.type === 'success' ? 'bg-green-500' : toast.type === 'error' ? 'bg-red-500' : toast.type === 'warning' ? 'bg-yellow-500' : 'bg-secondary'}">
                         ${toast.message}
                     </div>
                 `).join('')}
