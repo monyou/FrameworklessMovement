@@ -23,12 +23,6 @@ class RegistrationSuccessPage extends HTMLElement {
                     </svg>
                 </div>
                 <span class="text-blue-700 dark:text-gray-600 font-medium">Check your inbox for the activation email.</span>
-                <button
-                    class="mt-6 px-6 py-2 primary-btn"
-                    data-link="/login"
-                >
-                    Go to Login
-                </button>
             </div>
         `;
     }

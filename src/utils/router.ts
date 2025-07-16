@@ -57,6 +57,13 @@ const routes: Route[] = [
         noLayout: true
     },
     {
+        pattern: '/account-activated',
+        load: () => import('../pages/misc/AccountActivatedPage'),
+        tag: 'account-activated-page',
+        noAuth: true,
+        noLayout: true
+    },
+    {
         pattern: '/404',
         load: () => import('../pages/errors/404'),
         tag: 'not-found-page',
