@@ -1,6 +1,5 @@
 import { themeStore } from "../utils/store";
 
-
 class ThemeSwitcher extends HTMLElement {
     connectedCallback() {
         this.render();

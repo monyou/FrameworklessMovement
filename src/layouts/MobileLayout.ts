@@ -1,53 +1,37 @@
-import { navigate } from "../utils/router";
-import callServer from "../utils/server";
-import { userStore } from "../utils/store";
-
 class MobileLayout extends HTMLElement {
     connectedCallback() {
         this.render();
-        this.addEventListener('click', this.clickHandler);
-    }
-
-    clickHandler = async (e: MouseEvent) => {
-        if ((e.target as HTMLElement).matches('#logout-btn, #logout-btn *')) {
-            e.preventDefault();
-            this.logout();
-        }
-    }
-
-    logout = async () => {
-        const response = await callServer('/auth/logout', {
-            method: 'POST'
-        });
-
-        if (!response) return;
-
-        userStore.set(null);
-        navigate('/login');
     }
 
     render() {
+        const currentPath = window.location.pathname;
+
         this.innerHTML = `
-            <div id="mobile-layout" class="flex flex-col min-h-screen">
-                <header class="bg-gray-800 text-white p-4">
-                    <nav class="container mx-auto">
-                        <ul class="flex space-x-4 items-center">
-                            <li><a href="/" data-link class="hover:underline">Home</a></li>
-                            <li class="ml-auto">Hi, ${userStore()?.firstName || 'User'}</li>
-                            <li class="w-10 h-10"><theme-switcher></theme-switcher></li>
-                            <li>
-                                <button id="logout-btn" class="flex items-center space-x-2 cursor-pointer rounded-full p-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
-                                    </svg>
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </header>
-                <main class="flex-grow container mx-auto p-4" id="app-content"></main>
+            <div id="mobile-layout" class="flex flex-col h-full">
+                <main class="flex-grow container mx-auto p-4 overflow-y-auto" id="app-content"></main>
                 <footer class="bg-gray-800 text-white p-4 text-center">
-                    <p>© ${new Date().getFullYear()} MovieMatch. Built with ❤️ using Vanilla JS.</p>
+                    <nav class="flex justify-around items-center">
+                    <button class="flex flex-col items-center focus:outline-none group" data-link="/app" aria-current="${currentPath === '/app' ? 'page' : 'false'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 ${currentPath === '/app' ? 'text-yellow-500' : 'text-gray-200'} group-hover:text-yellow-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7m-9 2v8m4-8v8m5 0a2 2 0 002-2V7a2 2 0 00-2-2h-3.5a2 2 0 00-2 2v2" />
+                        </svg>
+                        <span class="text-xs mt-1 ${currentPath === '/app' ? 'text-yellow-500' : 'text-gray-200'}">Home</span>
+                    </button>
+                    <button class="flex flex-col items-center focus:outline-none group" data-link="/logs" aria-current="${currentPath === '/logs' ? 'page' : 'false'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 ${currentPath === '/logs' ? 'text-yellow-500' : 'text-gray-200'} group-hover:text-yellow-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2" stroke="currentColor" fill="none"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9h8M8 13h6M8 17h4" />
+                        </svg>
+                        <span class="text-xs mt-1 ${currentPath === '/logs' ? 'text-yellow-500' : 'text-gray-200'}">Logs</span>
+                    </button>
+                    <button class="flex flex-col items-center focus:outline-none group" data-link="/profile" aria-current="${currentPath === '/profile' ? 'page' : 'false'}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 ${currentPath === '/profile' ? 'text-yellow-500' : 'text-gray-200'} group-hover:text-yellow-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span class="text-xs mt-1 ${currentPath === '/profile' ? 'text-yellow-500' : 'text-gray-200'}">Profile</span>
+                    </button>
+                    </nav>
                 </footer>
             </div>
             <toast-component></toast-component>

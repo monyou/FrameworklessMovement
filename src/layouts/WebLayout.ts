@@ -1,46 +1,43 @@
-import { navigate } from "../utils/router";
-import callServer from "../utils/server";
 import { userStore } from "../utils/store";
 
 class WebLayout extends HTMLElement {
     connectedCallback() {
         this.render();
-        this.addEventListener('click', this.clickHandler);
-    }
-
-    clickHandler = async (e: MouseEvent) => {
-        if ((e.target as HTMLElement).matches('#logout-btn, #logout-btn *')) {
-            e.preventDefault();
-            this.logout();
-        }
-    }
-
-    logout = async () => {
-        const response = await callServer('/auth/logout', {
-            method: 'POST'
-        });
-
-        if (!response) return;
-
-        userStore.set(null);
-        navigate('/login');
     }
 
     render() {
+        const currentPath = window.location.pathname;
+
         this.innerHTML = `
             <div id="web-layout" class="flex flex-col min-h-screen">
                 <header class="bg-gray-800 text-white p-4">
                     <nav class="container mx-auto">
                         <ul class="flex space-x-4 items-center">
-                            <li><a href="/" data-link class="hover:underline">Home</a></li>
+                            <li><a href="/" data-link class="hover:underline ${currentPath === '/app' ? 'text-yellow-500' : ''}">Home</a></li>
+                            <li><a href="/logs" data-link class="hover:underline ${currentPath === '/logs' ? 'text-yellow-500' : ''}">Logs</a></li>
                             <li class="ml-auto">Hi, ${userStore()?.firstName || 'User'}</li>
-                            <li class="w-10 h-10"><theme-switcher></theme-switcher></li>
                             <li>
-                                <button id="logout-btn" class="flex items-center space-x-2 hover:underline cursor-pointer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2h4a2 2 0 012 2v1" />
+                                <button 
+                                    data-link="/profile"
+                                    class="rounded-full p-2 transition-colors duration-200 bg-gray-700 cursor-pointer hover:bg-gray-600"
+                                    title="Profile"
+                                >
+                                    <svg 
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        class="h-6 w-6" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke="currentColor"
+                                    >
+                                        <circle cx="12" cy="8" r="4" class="fill-current ${currentPath === '/profile' ? 'text-yellow-500' : 'text-gray-300'}"/>
+                                        <path 
+                                            stroke-linecap="round" 
+                                            stroke-linejoin="round" 
+                                            stroke-width="2" 
+                                            d="M6 20c0-2.21 3.58-4 8-4s8 1.79 8 4"
+                                            class="stroke-current ${currentPath === '/profile' ? 'text-yellow-500' : 'text-gray-300'}"
+                                        />
                                     </svg>
-                                    <span>Logout</span>
                                 </button>
                             </li>
                         </ul>

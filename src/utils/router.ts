@@ -40,6 +40,16 @@ const routes: Route[] = [
         tag: 'dashboard-page'
     },
     {
+        pattern: '/profile',
+        load: () => import('../pages/profile/ProfilePage'),
+        tag: 'profile-page'
+    },
+    {
+        pattern: '/logs',
+        load: () => import('../pages/logs/LogsPage'),
+        tag: 'logs-page'
+    },
+    {
         pattern: '/registration-success',
         load: () => import('../pages/misc/RegistrationSuccessPage'),
         tag: 'registration-success-page',
@@ -80,6 +90,8 @@ const extractParams = (pattern: string, path: string): Record<string, string> | 
 
 
 export const navigate = async (path: string, replace?: boolean) => {
+    if (window.location.pathname === path) return;
+
     if (replace) {
         history.replaceState({}, '', path);
     } else {
