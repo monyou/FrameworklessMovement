@@ -8,3 +8,7 @@ export type LoginResponse = {
     email: string;
     firstName: string;
 }
+
+export type RegisterResponse = {
+    id: string;
+}

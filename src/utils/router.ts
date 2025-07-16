@@ -40,6 +40,13 @@ const routes: Route[] = [
         tag: 'dashboard-page'
     },
     {
+        pattern: '/registration-success',
+        load: () => import('../pages/misc/RegistrationSuccessPage'),
+        tag: 'registration-success-page',
+        noAuth: true,
+        noLayout: true
+    },
+    {
         pattern: '/404',
         load: () => import('../pages/errors/404'),
         tag: 'not-found-page',

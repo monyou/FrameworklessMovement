@@ -1,30 +1,10 @@
-import z from "zod";
 import { navigate } from "../../utils/router";
 import useSignal from "../../utils/useSignal";
 import type { LoginFormStore } from "../../types/formTypes";
 import callServer from "../../utils/server";
 import { userStore } from "../../utils/store";
 import type { LoginResponse } from "../../types/apiTypes";
-
-const loginSchema = z.object({
-    email: z
-        .string()
-        .nonempty("Email is required")
-        .email("Invalid email address"),
-    password: z
-        .string()
-        .nonempty("Password is required")
-        .min(6, "Password must be at least 6 characters long")
-        .refine(val => /[A-Z]/.test(val), {
-            message: "Password must contain at least one uppercase letter",
-        })
-        .refine(val => /\d/.test(val), {
-            message: "Password must contain at least one number",
-        })
-        .refine(val => /[!@#$%^&*(),.?":{}|<>_\-\\[\]\/~`+=;]/.test(val), {
-            message: "Password must contain at least one special character",
-        }),
-});
+import { loginSchema } from "../../utils/zodSchemas";
 
 class LoginPage extends HTMLElement {
     loginFormSubmitted = false;
@@ -138,7 +118,7 @@ class LoginPage extends HTMLElement {
 
         if (!response?.data) return;
 
-        userStore.set({ email: response.data.email, firstName: response.data.firstName, gpsEnabled: false });
+        userStore.set({ email: response.data.email, firstName: response.data.firstName, gpsCoordinates: null, online: false });
         navigate("/app");
     };
 
